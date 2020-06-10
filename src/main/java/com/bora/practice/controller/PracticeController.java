@@ -1,26 +1,31 @@
 package com.bora.practice.controller;
 
 import com.bora.practice.model.User;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/home")
+//@RequestMapping(value = "/home")
 public class PracticeController {
 
+/*
     @GetMapping()
     public User index() {
-        return new User("010-1111-1111", "name", "서울시");
+        return new User("010-1111-1111", "이름", "서울시", new String[]{"기본값"});
+    }
+*/
+
+    @GetMapping("home")
+    public User getUser(
+            @RequestParam(value = "name", required = false, defaultValue = "name") String name,
+            @RequestParam(value = "arr", required = false, defaultValue = "arr") String arr[]) {
+        User user = new User("010-1111-1111", name, "서울시", arr);
+        return user;
     }
 
-    @GetMapping("args")
-    public  User getArgs(
-            @RequestParam(value = "name")String name) {
-        User user = new User("010-1111-1111", name, "서울시");
-        user.setName(user.getName());
-
-        return user;
+    @PostMapping("home")
+    public User postUser(@RequestBody User user) {
+        String name = user.getName();
+        String[] arr = user.getArr();
+        return user = new User("010-1111-1111",name, "서울시", arr);
     }
 }
