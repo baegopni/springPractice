@@ -35,4 +35,20 @@ public class BoardService {
     public void delBoard(int id){
         datas.remove(id-1);
     }
+
+    //id값으로 보드수정
+    public void updateBoard(int id, Board b){
+        List<Board> temp = new ArrayList<Board>();
+
+        b.setId(id);
+
+        for(int i=0; i<datas.size(); i++) {
+            if(i == id-1) {
+                temp.add(b);
+            }else{
+                temp.add(datas.get(i));
+            }
+        }
+        datas = temp;
+    }
 }

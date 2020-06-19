@@ -34,4 +34,10 @@ public class BoardController {
         boardService.delBoard(id);
         return "성공적으로 삭제되었습니다.";
     }
+
+    @PutMapping("board/{id}")
+    public String updateBoard(@PathVariable(value = "id") int id, @RequestBody Board b){
+        boardService.updateBoard(id, b);
+        return "성공적으로 수정되었습니다";
+    }
 }
