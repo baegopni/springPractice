@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>content CRUD</title>
+    <style>
+        #spoiler {
+            display: none;
+        }
+
+        .btn {
+            background-color: lightpink;
+            border: none;
+            border-radius: 20%;
+        }
+
+  </style>
+</head>
+
+<body>
+
+<form action="javascript:void(0);" method="POST" onsubmit="app.Add()">
+    <input type="text" id="add-name" placeholder="입력내용">
+    <input type="submit" value="추가" class="btn">
+</form>
+
+<div id="spoiler" role="aria-hidden">
+    <form action="javascript:void(0);" method="POST" id="saveEdit">
+        <input type="text" id="edit-name">
+        <input type="submit" value="수정" class="btn" /> <a onclick="CloseInput()" aria-label="Close"></a>
+    </form>
+</div>
+
+<p id="counter"></p>
+
+<table>
+    <tbody id="content">
+    </tbody>
+</table>
+
+<script>
+        var app = new function() {
+
+            this.el = document.getElementById('content');
+            this.content = ['테스트1', '테스트2', '테스트3'];
+
+            this.Count = function(data) {
+                var el   = document.getElementById('counter');
+                var name = 'content';
+
+                if (data) {
+                    if (data > 1) name = 'content';
+                    el.innerHTML = data + ' ' + name ;
+                } else el.innerHTML = 'No ' + name;
+            };
+
+            this.FetchAll = function() {
+                var data = '';
+
+                if (this.content.length > 0) {
+                    for (i = 0; i < this.content.length; i++) {
+                        data += '<tr>';
+                        data += '<td>' + this.content[i] + '</td>';
+                        data += '<td><button onclick="app.Edit(' + i + ')" class="btn">수정</button></td>';
+                        data += '<td><button onclick="app.Delete(' + i + ')" class="btn">삭제</button></td>';
+                        data += '</tr>';
+                    }
+                }
+
+                this.Count(this.content.length);
+                return this.el.innerHTML = data;
+            };
+
+            this.Add = function () {
+                el = document.getElementById('add-name');
+
+                var content_value = el.value;
+
+                if (content_value) {
+                    this.content.push(content_value.trim());
+                    el.value = '';
+                    this.FetchAll();
+                }
+            };
+
+            this.Edit = function (item) {
+                var el = document.getElementById('edit-name');
+
+                el.value = this.content[item];
+
+                document.getElementById('spoiler').style.display = 'block';
+                self = this;
+
+                document.getElementById('saveEdit').onsubmit = function() {
+
+                    var content_value = el.value;
+
+                    if (content_value) {
+                        self.content.splice(item, 1, content_value.trim());
+                        self.FetchAll();
+                        CloseInput();
+                    }
+                }
+            };
+
+            this.Delete = function (item) {
+                this.content.splice(item, 1);
+                this.FetchAll();
+            };
+
+        }
+
+        app.FetchAll();
+
+        function CloseInput() {
+        document.getElementById('spoiler').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
